@@ -9,7 +9,9 @@ import {
 } from "@/components/ui/menubar";
 import { ModeToggle } from "@/components/ui/theme-button";
 import { Separator } from "@/components/ui/separator";
-import { openFile } from "../utils/fileUtils";
+import { openFile } from '../utils/fileUtils';
+import Image from 'next/image';
+import NotterCodeMini from "../../../public/MiniLogo.png"
 
 interface NavbarProps {
   onFileOpen: (content: string, fileName: string) => void;
@@ -68,6 +70,9 @@ export function Navbar({ onFileOpen, onNewFile, onSaveFile }: NavbarProps) {
   return (
     <>
       <nav className="bg-zinc-950 text-zinc-500 py-2 flex">
+        <div className="flex items-center ml-2">
+            <Image src={NotterCodeMini} alt="" width={30} height={30} className="object-contain"/>
+        </div>
         <Menubar className="flex flex-row gap-2 ml-2 items-center">
           <MenubarMenu>
             <MenubarTrigger>File</MenubarTrigger>

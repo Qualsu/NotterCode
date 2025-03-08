@@ -37,7 +37,7 @@ export function CodeEditor({ content, language, onContentChange }: CodeEditorPro
       value={content}
       onChange={(value) => onContentChange(value || '')}
       loading={null}
-      className="editor"
+      className="editor flex-grow overflow-hidden"
     />
   );
 }

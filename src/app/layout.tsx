@@ -17,10 +17,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body>
+      <body className="bg-black">
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >

@@ -18,9 +18,9 @@ interface FooterProps {
 
 export function Footer({ languages, currentLanguage, onLanguageChange, lineCount, charCount }: FooterProps) {
   return (
-    <footer className="flex justify-between items-center bg-zinc-950 text-zinc-500 py-2 px-4 mb-12 select-none">
+    <footer className="flex justify-between items-center bg-zinc-950 text-zinc-500 py-2 px-4 select-none fixed bottom-0 left-0 right-0">
       <p/>
-      <div className="flex items-center mb-2">
+      <div className="flex items-center">
         <p className="mr-4">Ln {lineCount}, Sym {charCount}</p>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

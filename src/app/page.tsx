@@ -12,7 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import Image from 'next/image';
 import Empty from "../../public/Empty.png"
 import { Button } from '@/components/ui/button';
-import { File, Plus } from 'lucide-react';
+import { File, Plus, Loader2 } from 'lucide-react';
 
 interface File {
   name: string;
@@ -32,6 +32,7 @@ export default function Home() {
   });
   const [lineCount, setLineCount] = useState(0);
   const [charCount, setCharCount] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     localStorage.setItem('files', JSON.stringify(files));
@@ -48,6 +49,10 @@ export default function Home() {
       localStorage.removeItem('activeFile');
     }
   }, [activeFile]);
+
+  useEffect(() => {
+    setLoading(false);
+  }, []);
 
   const handleFileOpen = (content: string, fileName: string) => {
     const newFile = { name: fileName, content, language: getLanguageFromFileName(fileName) };
@@ -130,14 +135,32 @@ export default function Home() {
     }
   };
 
+  const handleRenameFile = (oldName: string, newName: string, newLanguage: string) => {
+    const updatedFiles = files.map(file =>
+      file.name === oldName ? { ...file, name: newName, language: newLanguage } : file
+    );
+    setFiles(updatedFiles);
+    if (activeFile && activeFile.name === oldName) {
+      setActiveFile({ ...activeFile, name: newName, language: newLanguage });
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-black">
+        <Loader2 size={64} className='animate-spin'/>
+      </div>
+    );
+  }
+
   return (
     <>
       <Navbar onFileOpen={handleFileOpen} onNewFile={handleNewFile} onSaveFile={handleSaveFile} />
       <div className="flex flex-col bg-zinc-900/10 h-screen">
-        <div className="flex flex-grow">
+        <div className="flex flex-grow overflow-hidden">
           <Navigation width={navWidth} setWidth={setNavWidth} />
-          <div className="flex-grow flex flex-col">
-            <Filebar files={files} activeFile={activeFile} onTabClick={handleTabClick} onCloseTab={handleCloseTab} onNewFile={handleNewFile} />
+          <div className="flex-grow flex flex-col overflow-hidden">
+            <Filebar files={files} activeFile={activeFile} onTabClick={handleTabClick} onCloseTab={handleCloseTab} onNewFile={handleNewFile} onRenameFile={handleRenameFile} />
             {!activeFile && (
               <div className="flex-grow flex flex-col items-center justify-center select-none mt-24">
                 <Image src={Empty} alt="" width={400} />
@@ -148,7 +171,7 @@ export default function Home() {
               </div>
             )}
             {activeFile && (
-              <div className="flex-grow flex flex-col">
+              <div className="flex-grow flex flex-col overflow-hidden">
                 <CodeEditor content={activeFile.content} fileName={activeFile.name} language={activeFile.language || 'plaintext'} onContentChange={handleContentChange} />
               </div>
             )}
