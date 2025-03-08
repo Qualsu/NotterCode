@@ -1,8 +1,8 @@
 import { FaJs, FaJava, FaPython, FaHtml5, FaCss3Alt } from 'react-icons/fa';
-import { SiTypescript, SiJson, SiPhp, SiRuby, SiGo, SiRust, SiMarkdown, SiShell, SiSwift, SiKotlin, SiDart, SiR, SiPerl, SiLua, SiSqlite, SiVim, SiCsharp, SiC, SiSass, SiXaml, SiYaml, SiPowershell } from 'react-icons/si';
+import { SiTypescript, SiJson, SiPhp, SiRuby, SiGo, SiRust, SiMarkdown, SiShell, SiSwift, SiKotlin, SiDart, SiR, SiPerl, SiLua, SiSqlite, SiVim, SiCsharp, SiC, SiSass, SiPowershell } from 'react-icons/si';
 import Image from 'next/image';
 import GlowLangIcon from "../../../public/GlowLang.png"
-import { File } from "lucide-react";
+import { Code2, File } from "lucide-react";
 
 export const acceptFileTypes: string = '.txt,.js,.jsx,.ts,.tsx,.json,.py,.java,.cpp,.c,.cs,.rb,.go,.rs,.php,.html,.css,.scss,.sass,.xml,.yaml,.yml,.md,.sh,.bat,.ps1,.swift,.kt,.dart,.r,.pl,.lua,.sql,.vb,.vbs,.m,.h,.hpp,.asm,.s,.ini,.cfg,.conf,.toml,.json5,.env,.env.local,.env.development,.env.test,.env.production,.env.local, .gl, .glow, .glang, .glowlang';
 
@@ -42,9 +42,9 @@ export const getIconForLanguage = (language: string | undefined) => {
     case 'scss':
       return <SiSass />;
     case 'xml':
-      return <SiXaml />;
+      return <Code2 />;
     case 'yaml':
-      return <SiYaml />;
+      return <Code2 />;
     case 'markdown':
       return <SiMarkdown />;
     case 'shell':
