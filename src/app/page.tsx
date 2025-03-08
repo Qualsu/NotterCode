@@ -8,7 +8,6 @@ import { Filebar } from './components/filebar';
 import { Footer } from './components/footer';
 import { getLanguageFromFileName } from "./utils/languageUtils";
 import { acceptFileTypes, languages } from './utils/fileUtils';
-import { Separator } from "@/components/ui/separator";
 import Image from 'next/image';
 import Empty from "../../public/Empty.png"
 import { Button } from '@/components/ui/button';
