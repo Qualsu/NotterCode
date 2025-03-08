@@ -173,8 +173,8 @@ export default function Home() {
           <Navigation width={navWidth} setWidth={setNavWidth} />
           <div className="flex-grow flex flex-col overflow-hidden">
             <Filebar files={files} activeFile={activeFile} onTabClick={handleTabClick} onCloseTab={handleCloseTab} onNewFile={handleNewFile} onRenameFile={handleRenameFile} />
-            {!activeFile && (
-              <div className="flex-grow flex flex-col items-center justify-center select-none mt-24">
+            {files.length === 0 && (
+              <div className="flex-grow flex flex-col items-center justify-center select-none">
                 <Image src={Empty} alt="" width={400} />
                 <div className='flex flex-row gap-4'>
                   <Button variant="ghost" onClick={handleNewFile}><Plus /> Create</Button>
@@ -182,14 +182,13 @@ export default function Home() {
                 </div>
               </div>
             )}
-            {activeFile && (
+            {activeFile && files.length > 0 && (
               <div className="flex-grow flex flex-col overflow-hidden">
                 <CodeEditor content={activeFile.content} fileName={activeFile.name} language={activeFile.language || 'plaintext'} onContentChange={handleContentChange} />
               </div>
             )}
           </div>
         </div>
-        <Separator className="bg-zinc-800" />
         <Footer
           languages={languages}
           currentLanguage={activeFile?.language || 'plaintext'}
