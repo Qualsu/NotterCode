@@ -33,7 +33,7 @@ export function Navigation({ width, setWidth }: { width: number, setWidth: (widt
                 <h1 className="text-white/10 font-bold">Develop...</h1>
             </nav>
             <div
-                className="resizer w-1 cursor-col-resize bg-transparent"
+                className="resizer cursor-col-resize hover:bg-zinc-900 duration-150 ease-i"
                 onMouseDown={handleMouseDown}
             />
         </div>
