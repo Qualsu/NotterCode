@@ -23,30 +23,42 @@ interface File {
 export default function Home() {
   const [navWidth, setNavWidth] = useState(300);
   const [files, setFiles] = useState<File[]>(() => {
-    const savedFiles = localStorage.getItem('files');
-    return savedFiles ? JSON.parse(savedFiles) : [];
+    if (typeof window !== 'undefined') {
+      const savedFiles = localStorage.getItem('files');
+      return savedFiles ? JSON.parse(savedFiles) : [];
+    }
+    return [];
   });
   const [activeFile, setActiveFile] = useState<File | null>(() => {
-    const savedActiveFile = localStorage.getItem('activeFile');
-    return savedActiveFile ? JSON.parse(savedActiveFile) : null;
+    if (typeof window !== 'undefined') {
+      const savedActiveFile = localStorage.getItem('activeFile');
+      return savedActiveFile ? JSON.parse(savedActiveFile) : null;
+    }
+    return null;
   });
   const [lineCount, setLineCount] = useState(0);
   const [charCount, setCharCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    localStorage.setItem('files', JSON.stringify(files));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('files', JSON.stringify(files));
+    }
   }, [files]);
 
   useEffect(() => {
     if (activeFile) {
-      localStorage.setItem('activeFile', JSON.stringify(activeFile));
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('activeFile', JSON.stringify(activeFile));
+      }
       const lines = activeFile.content.split('\n').length;
       const chars = activeFile.content.length;
       setLineCount(lines);
       setCharCount(chars);
     } else {
-      localStorage.removeItem('activeFile');
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('activeFile');
+      }
     }
   }, [activeFile]);
 
