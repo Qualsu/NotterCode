@@ -4,7 +4,7 @@ import Image from 'next/image';
 import GlowLangIcon from "../../../public/GlowLang.png"
 import { Code2, File, Image as ImageIcon, Video } from "lucide-react";
 
-export const acceptFileTypes: string = '.txt,.js,.jsx,.ts,.tsx,.json,.py,.java,.cpp,.c,.cs,.rb,.go,.rs,.php,.html,.css,.scss,.sass,.xml,.yaml,.yml,.md,.sh,.bat,.ps1,.swift,.kt,.dart,.r,.pl,.lua,.sql,.vb,.vbs,.m,.h,.hpp,.asm,.s,.ini,.cfg,.conf,.toml,.json5,.env,.env.local,.env.development,.env.test,.env.production,.env.local,.gl,.glow,.glang,.glowlang,.png,.jpg,.jpeg,.gif,.bmp,.tiff,.webp, .svg';
+export const acceptFileTypes: string = '.txt,.js,.jsx,.ts,.tsx,.json,.py,.java,.cpp,.c,.cs,.rb,.go,.rs,.php,.html,.css,.scss,.sass,.xml,.yaml,.yml,.md,.sh,.bat,.ps1,.swift,.kt,.dart,.r,.pl,.lua,.sql,.vb,.vbs,.m,.h,.hpp,.asm,.s,.ini,.cfg,.conf,.toml,.json5,.env,.env.local,.env.development,.env.test,.env.production,.env.local,.gl,.glow,.glang,.glowlang,.png,.jpg,.jpeg,.gif,.bmp,.tiff,.webp,.svg';
 
 export const languages: string[] = [
   'plaintext', 'glowlang', 'javascript', 'typescript', 'json', 'python', 'java', 'cpp', 'c', 'csharp', 'ruby', 'go', 'rust', 'php', 'html', 'css', 'scss', 'xml', 'yaml', 'markdown', 'shell', 'bat', 'powershell', 'swift', 'kotlin', 'dart', 'r', 'perl', 'lua', 'sql', 'vb', 'objective-c', 'ini'
