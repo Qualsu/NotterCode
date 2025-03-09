@@ -8,6 +8,7 @@ import { Filebar } from './components/filebar';
 import { Footer } from './components/footer';
 import { getLanguageFromFileName } from "./utils/languageUtils";
 import { acceptFileTypes, languages } from './utils/fileUtils';
+import { Separator } from "@/components/ui/separator";
 import Image from 'next/image';
 import Empty from "../../public/Empty.png"
 import { Button } from '@/components/ui/button';
@@ -17,6 +18,8 @@ interface File {
   name: string;
   content: string;
   language?: string;
+  type?: string;
+  size?: number;
 }
 
 export default function Home() {
@@ -38,6 +41,7 @@ export default function Home() {
   const [lineCount, setLineCount] = useState(0);
   const [charCount, setCharCount] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [zoom, setZoom] = useState(1);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -50,10 +54,15 @@ export default function Home() {
       if (typeof window !== 'undefined') {
         localStorage.setItem('activeFile', JSON.stringify(activeFile));
       }
-      const lines = activeFile.content.split('\n').length;
-      const chars = activeFile.content.length;
-      setLineCount(lines);
-      setCharCount(chars);
+      if (activeFile.type?.startsWith('image/') || activeFile.type?.startsWith('video/')) {
+        setLineCount(0);
+        setCharCount(0);
+      } else {
+        const lines = activeFile.content.split('\n').length;
+        const chars = activeFile.content.length;
+        setLineCount(lines);
+        setCharCount(chars);
+      }
     } else {
       if (typeof window !== 'undefined') {
         localStorage.removeItem('activeFile');
@@ -65,8 +74,8 @@ export default function Home() {
     setLoading(false);
   }, []);
 
-  const handleFileOpen = (content: string, fileName: string) => {
-    const newFile = { name: fileName, content, language: getLanguageFromFileName(fileName) };
+  const handleFileOpen = (content: string, fileName: string, type: string, size: number) => {
+    const newFile = { name: fileName, content, language: getLanguageFromFileName(fileName), type, size };
     setFiles([...files, newFile]);
     setActiveFile(newFile);
   };
@@ -127,9 +136,9 @@ export default function Home() {
       if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
-          handleFileOpen(e.target?.result as string, file.name);
+          handleFileOpen(e.target?.result as string, file.name, file.type, file.size);
         };
-        reader.readAsText(file);
+        reader.readAsDataURL(file);
       }
     };
     input.click();
@@ -138,7 +147,12 @@ export default function Home() {
   const handleSaveFile = () => {
     if (activeFile) {
       const element = document.createElement('a');
-      const file = new Blob([activeFile.content], { type: 'text/plain' });
+      let file;
+      if (activeFile.type?.startsWith('image/') || activeFile.type?.startsWith('video/')) {
+        file = new Blob([activeFile.content], { type: activeFile.type });
+      } else {
+        file = new Blob([activeFile.content], { type: 'text/plain' });
+      }
       element.href = URL.createObjectURL(file);
       element.download = activeFile.name;
       document.body.appendChild(element);
@@ -153,6 +167,12 @@ export default function Home() {
     setFiles(updatedFiles);
     if (activeFile && activeFile.name === oldName) {
       setActiveFile({ ...activeFile, name: newName, language: newLanguage });
+    }
+  };
+
+  const handleWheel = (e: React.WheelEvent) => {
+    if (activeFile?.type?.startsWith('image/')) {
+      setZoom(prevZoom => Math.max(0.1, prevZoom + e.deltaY * -0.01));
     }
   };
 
@@ -182,18 +202,34 @@ export default function Home() {
               </div>
             )}
             {activeFile && files.length > 0 && (
-              <div className="flex-grow flex flex-col overflow-hidden">
-                <CodeEditor content={activeFile.content} fileName={activeFile.name} language={activeFile.language || 'plaintext'} onContentChange={handleContentChange} />
+              <div className="flex-grow flex flex-col overflow-hidden" onWheel={handleWheel}>
+                {activeFile.type?.startsWith('image/') ? (
+                  <div className="flex-grow flex justify-center items-center">
+                    <Image src={activeFile.content} width={200} height={200} alt={activeFile.name} style={{ transform: `scale(${zoom})` }} />
+                  </div>
+                ) : activeFile.type?.startsWith('video/') ? (
+                  <div className="flex-grow flex justify-center items-center">
+                    <video controls className="h-full">
+                      <source src={activeFile.content} type={activeFile.type} />
+                      Your browser does not support the video tag.
+                    </video>
+                  </div>
+                ) : (
+                  <CodeEditor content={activeFile.content} fileName={activeFile.name} language={activeFile.language || 'plaintext'} onContentChange={handleContentChange} />
+                )}
               </div>
             )}
           </div>
         </div>
+        <Separator className="bg-zinc-800" />
         <Footer
           languages={languages}
           currentLanguage={activeFile?.language || 'plaintext'}
           onLanguageChange={handleLanguageChange}
           lineCount={lineCount}
           charCount={charCount}
+          fileSize={activeFile?.size}
+          fileType={activeFile?.type}
         />
       </div>
     </>

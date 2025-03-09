@@ -2,13 +2,14 @@ import React, { useState, useRef } from 'react';
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
-import { getIconForLanguage } from '../utils/fileUtils';
+import { getIconForLanguage, getIconForFileType } from '../utils/fileUtils';
 import { getLanguageFromFileName } from '../utils/languageUtils';
 
 interface File {
   name: string;
   content: string;
   language?: string;
+  type?: string;
 }
 
 interface FilebarProps {
@@ -81,11 +82,11 @@ export function Filebar({ files, activeFile, onTabClick, onCloseTab, onNewFile, 
                   onClick={() => onTabClick(file)}
                   onDoubleClick={() => handleFileDoubleClick(file)}
                 >
-                  {renamingFile === file.name ? (
+                    {renamingFile === file.name ? (
                     getIconForLanguage(newFileLanguage)
-                  ) : (
-                    getIconForLanguage(file.language)
-                  )}
+                    ) : (
+                    file.type?.startsWith('image/') || file.type?.startsWith('video/') ? getIconForFileType(file.type) : getIconForLanguage(file.language)
+                    )}
                   {renamingFile === file.name ? (
                     <input
                       type="text"
